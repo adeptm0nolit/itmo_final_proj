@@ -156,7 +156,7 @@ async def get_f_type(callback: types.CallbackQuery, state: FSMContext):
             builder.adjust(1)
             await callback.message.answer("Select type of trigonometric function:", reply_markup=builder.as_markup())
     else:
-        if callback.data in ['sin', 'tan', 'sec']:
+        if callback.data in ['sin', 'tan', 'sinh', 'tanh']:
             await state.update_data(func_type=callback.data)
             await state.set_state(Form.coefficients)
             await callback.message.answer("Enter coefficients (k and b)")
