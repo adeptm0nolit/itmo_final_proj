@@ -19,7 +19,7 @@ from pyexpat.errors import messages
 from vae_1_fp import gen_num, decoder, vect
 
 
-API_TOKEN = Path('./api.txt').read_text()
+API_TOKEN = Path("C:\\Users\\pimen\\OneDrive\\Decktop\\api.txt").read_text()
 
 dp = Dispatcher()
 
