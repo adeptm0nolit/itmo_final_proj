@@ -49,7 +49,7 @@ async def set_bot_commands():
 @dp.message(Command('start'))
 async def start(msg: Message):
     await msg.answer(f'Bot started successfully!')
-    await msg.answer_sticker('CAACAgIAAxkBAANvZ6-EM5C9QIIgYqY4I0gd3RYDTlQAAhwAA10FghaTEeFoViinNTYE')
+
 
 # Обработчик для команды /generate
 @dp.message(Command('generate'))
