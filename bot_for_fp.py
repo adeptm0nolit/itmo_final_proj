@@ -130,7 +130,7 @@ async def get_func_type(message: Message):
     builder.adjust(1)
     await message.answer("Select plot of which function type you want to create:", reply_markup=builder.as_markup())
 
-
+#Обработчик выбора типа функции
 @dp.callback_query()
 async def get_f_type(callback: types.CallbackQuery, state: FSMContext):
     if callback.data in ['linear', 'polynomial', 'rational', 'trigonometry']:
@@ -163,7 +163,7 @@ async def get_f_type(callback: types.CallbackQuery, state: FSMContext):
 
     await callback.answer()
 
-
+#Проверка введенной степени
 @dp.message(Form.power)
 async def get_power(message: Message, state: FSMContext):
     if not message.text.isdigit():
@@ -180,7 +180,7 @@ async def get_power(message: Message, state: FSMContext):
     else:
         await message.answer("Enter coefficients (k and b)")
 
-
+#Проверка введённых коэффициентов
 @dp.message(Form.coefficients)
 async def get_coefficients(message: Message, state: FSMContext):
     t = list(message.text.split(' '))
@@ -194,7 +194,7 @@ async def get_coefficients(message: Message, state: FSMContext):
     await state.set_state(Form.x_range)
     await message.answer("Enter a range of x")
 
-
+#Проверка введенного промежутка для X
 @dp.message(Form.x_range)
 async def get_x_range(message: Message, state: FSMContext):
     t = list(message.text.split(' '))
@@ -224,7 +224,8 @@ async def get_x_range(message: Message, state: FSMContext):
     else:
         await trigon_func(data, chat_id, msg_id)
 
-
+#Создание массивов для построения графиков
+#Линейная функция
 async def linear_func(data: dict, chat_id: int, msg_id: int):
     x_min, x_max = float(min(data['x_range'])), float(max(data['x_range']))
     arg = np.array([i for i in np.linspace(x_min, x_max, 1000)])
@@ -233,7 +234,7 @@ async def linear_func(data: dict, chat_id: int, msg_id: int):
     y = y + b
     await create_plot(arg, y, chat_id, msg_id)
 
-
+#Многочлен n-ной степени
 async def polynomial_func(data: dict, chat_id: int, msg_id: int):
     x_min, x_max = float(min(data['x_range'])), float(max(data['x_range']))
     arg = np.array([i for i in np.linspace(x_min, x_max, 1000)])
@@ -243,7 +244,7 @@ async def polynomial_func(data: dict, chat_id: int, msg_id: int):
         y = y + (np.power(arg, i) * coef[power - i])
     await create_plot(arg, y, chat_id, msg_id)
 
-
+#Рациональная функция
 async def rational_func(data: dict, chat_id: int, msg_id: int):
     x_min, x_max = float(min(data['x_range'])), float(max(data['x_range']))
     arg = np.array([i for i in np.linspace(x_min, x_max, 1000)])
@@ -251,7 +252,7 @@ async def rational_func(data: dict, chat_id: int, msg_id: int):
     y = k / (np.power(arg, power) + b)
     await create_plot(arg, y, chat_id, msg_id, lim=True)
 
-
+#Тригонометрические функции
 async def trigon_func(data: dict, chat_id: int, msg_id: int):
     f_type = data['func_type']
     x_min, x_max = float(min(data['x_range'])), float(max(data['x_range']))
@@ -270,6 +271,7 @@ async def trigon_func(data: dict, chat_id: int, msg_id: int):
     await create_plot(arg, y, chat_id, msg_id)
 
 
+#Построение и отправка готового графика
 async def create_plot(x, y: np.array, chat_id: int, msg_id: int, lim: bool = False, tan: bool = False):
     img_buf = io.BytesIO()
 
